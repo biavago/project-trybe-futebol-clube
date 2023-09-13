@@ -1,5 +1,6 @@
 import * as express from 'express';
-import router from './routes';
+// import router from './routes';
+import teamsRouter from './routes/teams.routes';
 
 class App {
   public app: express.Express;
@@ -8,8 +9,9 @@ class App {
     this.app = express();
 
     this.config();
-    this.routes();
     this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.use('/teams', teamsRouter);
+    // this.routes();
   }
 
   private config():void {
@@ -28,9 +30,9 @@ class App {
     this.app.listen(PORT, () => console.log(`Running on port ${PORT}`));
   }
 
-  private routes(): void {
-    this.app.use(router);
-  }
+  // private routes(): void {
+  //   this.app.use(teamsRoutes);
+  // }
 }
 
 export { App };

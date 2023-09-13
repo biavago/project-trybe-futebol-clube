@@ -28,6 +28,7 @@ SequelizeTeam.init({
   modelName: 'teams',
   sequelize: db,
   timestamps: false,
+  underscored: true,
 });
 
 export default SequelizeTeam;

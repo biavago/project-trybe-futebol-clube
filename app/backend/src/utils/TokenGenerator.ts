@@ -1,18 +1,21 @@
-import * as jwt from 'jsonwebtoken';
-import IToken from '../Interfaces/Token';
+import { JwtPayload, sign, SignOptions, verify } from 'jsonwebtoken';
 
-export default class TokenGenerator implements IToken {
-  private generator = jwt;
+export default class TokenGenerator {
+  private static secret = process.env.JWT_SECRET || 'jwt_secret';
 
-  generateToken(payload: { email: string, role: string }): string {
-    return this.generator.sign(
-      payload,
-      process.env.JWT_SECRET as string || 'jwt_secret',
-      { expiresIn: '1d', algorithm: 'HS256' },
-    );
+  private static jwtConfig: SignOptions = {
+    algorithm: 'HS256', expiresIn: '1d',
+  };
+
+  static generateToken(payload: JwtPayload): string {
+    return sign(payload, TokenGenerator.secret, TokenGenerator.jwtConfig);
   }
 
-  verifyToken(token: string): jwt.JwtPayload | string {
-    return this.generator.verify(token, process.env.JWT_SECRET as string || 'jwt_secret');
+  static verifyToken(token: string): JwtPayload | string {
+    try {
+      return verify(token, TokenGenerator.secret) as JwtPayload;
+    } catch (error) {
+      return { message: 'Invalid token' };
+    }
   }
 }

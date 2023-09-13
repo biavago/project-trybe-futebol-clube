@@ -4,30 +4,35 @@ export default {
   up(queryInterface: QueryInterface) {
     return queryInterface.createTable<Model<IMatches>>('matches', {
       id: {
-        type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-      },
-      home_team_id: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
-      home_team_goals: {
+      homeTeamId: {
+        allowNull: false,
+        field: 'home_team_id',
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
-      away_team_id: {
+      homeTeamGoals: {
+        allowNull: false,
+        field: 'home_team_goals',
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
-      away_team_goals: {
+      awayTeamId: {
+        allowNull: false,
+        field: 'away_team_id',
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
-      in_progress: {
+      awayTeamGoals: {
+        allowNull: false,
+        field: 'away_team_goals',
+        type: DataTypes.INTEGER,
+      },
+      inProgress: {
+        allowNull: false,
+        field: 'in_progress',
         type: DataTypes.BOOLEAN,
-        allowNull: false,
       },
     });
   },

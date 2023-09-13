@@ -4,14 +4,15 @@ export default {
   up(queryInterface: QueryInterface) {
     return queryInterface.createTable<Model<ITeam>>('teams', {
       id: {
-        type: DataTypes.INTEGER,
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        type: DataTypes.INTEGER,
       },
-      team_name: {
-        type: DataTypes.STRING,
+      teamName: {
         allowNull: false,
+        field: 'team_name',
+        type: DataTypes.STRING,
       },
     });
   },

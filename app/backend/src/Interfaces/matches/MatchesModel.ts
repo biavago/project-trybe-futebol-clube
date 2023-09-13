@@ -1,8 +1,19 @@
-// import { IMatches } from './Matches';
+import { IMatches } from './Matches';
 
-// export interface IMatchesModel {
-//   findAll(): Promise<IMatches[]>,
-//   findById(id: IMatches['id']): Promise<IMatches | null>,
-//   update(id: IMatches['id'], data: Partial<NewEntity<IMatches>>): Promise<IMatches | null>,
-//   delete(id: IMatches['id']): Promise<number>,
-// }
+export interface IMatchesModel {
+  create(
+    homeTeamId: number,
+    awayTeamId: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number,
+  ): Promise<IMatches>,
+  findById(id: number): Promise<IMatches | null>,
+  findByProgressStatus(inProgressStatus: boolean): Promise<IMatches[]>,
+  finish(id: number): Promise<number[]>;
+  getAllMatches(): Promise<IMatches[]>,
+  update(
+    id: number,
+    homeTeamGoals: number,
+    awayTeamGoals: number
+  ): Promise<number[]>;
+}

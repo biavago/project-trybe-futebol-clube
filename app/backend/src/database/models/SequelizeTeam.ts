@@ -10,23 +10,23 @@ import db from '.';
 class SequelizeTeam extends Model<InferAttributes<SequelizeTeam>,
 InferCreationAttributes<SequelizeTeam>> {
   declare id: CreationOptional<number>;
-  declare team_name: string;
+  declare teamName: string;
 }
 
 SequelizeTeam.init({
   id: {
-    type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true,
     autoIncrement: true,
+    primaryKey: true,
+    type: DataTypes.INTEGER,
   },
-  team_name: {
-    type: DataTypes.STRING(30),
+  teamName: {
     allowNull: false,
+    type: DataTypes.STRING(30),
   },
 }, {
-  sequelize: db,
   modelName: 'teams',
+  sequelize: db,
   timestamps: false,
 });
 

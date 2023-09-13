@@ -5,7 +5,7 @@ export default class UserModel {
   private model = SequelizeUsers;
 
   findByEmail(email: string): Promise<IUsers | null> {
-    const userFound = this.model.findOne({ where: { email } });
-    return userFound;
+    const user = this.model.findOne({ where: { email } });
+    return user;
   }
 }

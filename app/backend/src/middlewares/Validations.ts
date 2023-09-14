@@ -31,19 +31,11 @@ export default class Validations {
     next();
   }
 
-  // static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
-  //   const token = req.headers.authorization;
-  //   if (!token) {
-  //     return res.status(401).json({ message: 'Token not found' });
-  //   }
-
-  //   const bearerToken = token.split(' ')[1] || token;
-  //   const validToken = TokenGenerator.verifyToken(bearerToken);
-  //   if (validToken === 'Token must be a valid token') {
-  //     return res.status(401).json({ message: validToken });
-  //   }
-
-  //   req.body.payload = validToken;
-  //   next();
-  // }
+  static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ message: 'Token not found' });
+    }
+    next();
+  }
 }

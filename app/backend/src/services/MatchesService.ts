@@ -28,6 +28,15 @@ export default class MatchesService {
     return { status: 'SUCCESSFUL', data: match };
   }
 
+  async finish(id: number): Promise<ServiceResponse<ServiceMessage>> {
+    const match = await this.matchesModel.findById(id);
+    if (!match) return { status: 'NOT_FOUND', data: { message: `match ${id} not found` } };
+    await this.matchesModel.finish(id);
+    return {
+      status: 'SUCCESSFUL', data: { message: 'Finished' },
+    };
+  }
+
   async getAllMatches(): Promise<ServiceResponse<IMatches[]>> {
     const allMatches = await this.matchesModel.getAllMatches();
     return { status: 'SUCCESSFUL', data: allMatches };
@@ -41,15 +50,6 @@ export default class MatchesService {
     await this.matchesModel.update(id, homeTeamGoals, awayTeamGoals);
     return {
       status: 'SUCCESSFUL', data: { message: 'Match updated' },
-    };
-  }
-
-  async finish(id: number): Promise<ServiceResponse<ServiceMessage>> {
-    const match = await this.matchesModel.findById(id);
-    if (!match) return { status: 'NOT_FOUND', data: { message: `match ${id} not found` } };
-    await this.matchesModel.finish(id);
-    return {
-      status: 'SUCCESSFUL', data: { message: 'Finished' },
     };
   }
 }

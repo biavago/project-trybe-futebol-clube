@@ -11,7 +11,7 @@ export default class UsersService {
     private usersModel = new UsersModel(),
   ) {}
 
-  public async login(login: ILogin): Promise<ServiceResponse<IToken | ServiceMessage>> {
+  async login(login: ILogin): Promise<ServiceResponse<IToken | ServiceMessage>> {
     const user: IUsers | null = await this.usersModel.findByEmail(login.email);
     if (!user || !bcrypt.compareSync(login.password, user.password)) {
       return {
@@ -27,7 +27,7 @@ export default class UsersService {
     };
   }
 
-  public async role(email: string): Promise<ServiceResponse<object>> {
+  async role(email: string): Promise<ServiceResponse<object>> {
     const user = await this.usersModel.findByEmail(email);
     return {
       status: 'SUCCESSFUL',

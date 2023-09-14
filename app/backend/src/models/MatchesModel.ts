@@ -28,16 +28,6 @@ export default class MatchesModel implements IMatchesModel {
     return match;
   }
 
-  async getAllMatches(): Promise<IMatches[]> {
-    const allMatches = await this.model.findAll({
-      include: [
-        { model: TeamModel, as: 'homeTeam', attributes: { exclude: ['id'] } },
-        { model: TeamModel, as: 'awayTeam', attributes: { exclude: ['id'] } },
-      ],
-    });
-    return allMatches;
-  }
-
   async findByProgressStatus(inProgressStatus: boolean): Promise<IMatches[]> {
     const matches = await this.model.findAll({
       include: [
@@ -47,6 +37,24 @@ export default class MatchesModel implements IMatchesModel {
       where: { inProgress: inProgressStatus },
     });
     return matches;
+  }
+
+  async finish(id: number): Promise<number[]> {
+    const rowsUpdates = await this.model.update(
+      { inProgress: false },
+      { where: { id } },
+    );
+    return rowsUpdates;
+  }
+
+  async getAllMatches(): Promise<IMatches[]> {
+    const allMatches = await this.model.findAll({
+      include: [
+        { model: TeamModel, as: 'homeTeam', attributes: { exclude: ['id'] } },
+        { model: TeamModel, as: 'awayTeam', attributes: { exclude: ['id'] } },
+      ],
+    });
+    return allMatches;
   }
 
   async update(
@@ -59,13 +67,5 @@ export default class MatchesModel implements IMatchesModel {
       { where: { id } },
     );
     return rowsAffected;
-  }
-
-  async finish(id: number): Promise<number[]> {
-    const rowsUpdates = await this.model.update(
-      { inProgress: false },
-      { where: { id } },
-    );
-    return rowsUpdates;
   }
 }

@@ -13,12 +13,7 @@ export default class MatchesController {
     if (serviceResponse.status !== 'NOT_FOUND') {
       return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
     }
-    res.status(200).json(serviceResponse.data);
-  }
-
-  async getAllMatches(_req: Request, res: Response) {
-    const serviceResponse = await this.matchesService.getAllMatches();
-    res.status(200).json(serviceResponse.data);
+    return res.status(200).json(serviceResponse.data);
   }
 
   async findById(req: Request, res: Response) {
@@ -27,7 +22,13 @@ export default class MatchesController {
     if (serviceResponse.status !== 'SUCCESSFUL') {
       return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
     }
-    res.status(200).json(serviceResponse.data);
+    return res.status(200).json(serviceResponse.data);
+  }
+
+  async findByProgressStatus(req: Request, res: Response) {
+    const { inProgress } = req.query;
+    const serviceResponse = await this.matchesService.findByProgressStatus(inProgress as string);
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
   async finish(req: Request, res: Response): Promise<Response> {
@@ -36,6 +37,11 @@ export default class MatchesController {
     if (serviceResponse.status !== 'SUCCESSFUL') {
       return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
     }
+    return res.status(200).json(serviceResponse.data);
+  }
+
+  async getAllMatches(_req: Request, res: Response) {
+    const serviceResponse = await this.matchesService.getAllMatches();
     return res.status(200).json(serviceResponse.data);
   }
 

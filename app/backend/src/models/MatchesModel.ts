@@ -28,13 +28,13 @@ export default class MatchesModel implements IMatchesModel {
     return match;
   }
 
-  async findByProgressStatus(inProgressStatus: boolean): Promise<IMatches[]> {
+  async findByProgressStatus(progressStatus: boolean): Promise<IMatches[]> {
     const matches = await this.model.findAll({
       include: [
         { model: TeamModel, as: 'homeTeam', attributes: { exclude: ['id'] } },
         { model: TeamModel, as: 'awayTeam', attributes: { exclude: ['id'] } },
       ],
-      where: { inProgress: inProgressStatus },
+      where: { inProgress: progressStatus },
     });
     return matches;
   }

@@ -3,7 +3,7 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import { userInDB, body, invalidEmail, invalidPassword } from './mock/usersMock';
+import { userInDB, validInfo, invalidEmail, invalidPassword } from './mock/usersMock';
 
 chai.use(chaiHttp);
 const { expect } = chai;
@@ -26,7 +26,7 @@ describe('Testes da /login', () => {
   });
 
   it('Login válido', async function () {
-    const httpResponse = await chai.request(app).post('/login').send(body);
+    const httpResponse = await chai.request(app).post('/login').send(validInfo);
 
     expect(httpResponse.status).to.equal(200);
     expect(httpResponse.body).to.have.key('token');

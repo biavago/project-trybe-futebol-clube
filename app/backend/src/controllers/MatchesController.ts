@@ -8,50 +8,32 @@ export default class MatchesController {
   ) { }
 
   async create(req: Request, res: Response) {
-    const { id } = req.params;
-    const serviceResponse = await this.matchesService.findById(Number(id));
-    if (serviceResponse.status !== 'NOT_FOUND') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
-    return res.status(200).json(serviceResponse.data);
-  }
-
-  async findById(req: Request, res: Response) {
-    const { id } = req.params;
-    const serviceResponse = await this.matchesService.findById(Number(id));
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
-    return res.status(200).json(serviceResponse.data);
-  }
-
-  async findByProgressStatus(req: Request, res: Response) {
-    const { inProgress } = req.query;
-    const serviceResponse = await this.matchesService.findByProgressStatus(inProgress as string);
+    const { homeTeamId, awayTeamId, homeTeamGoals, awayTeamGoals } = req.body;
+    const serviceResponse = await this.matchesService.create(
+      homeTeamId,
+      awayTeamId,
+      homeTeamGoals,
+      awayTeamGoals,
+    );
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
   async finish(req: Request, res: Response): Promise<Response> {
     const id = Number(req.params.id);
     const serviceResponse = await this.matchesService.finish(id);
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
-    return res.status(200).json(serviceResponse.data);
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
-  async getAllMatches(_req: Request, res: Response) {
-    const serviceResponse = await this.matchesService.getAllMatches();
-    return res.status(200).json(serviceResponse.data);
+  async getAllMatches(req: Request, res: Response): Promise<Response> {
+    const { inProgress } = req.query;
+    const serviceResponse = await this.matchesService.getAllMatches(inProgress as string);
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 
   async update(req: Request, res: Response): Promise<Response> {
     const id = Number(req.params.id);
     const { homeTeamGoals, awayTeamGoals } = req.body;
     const serviceResponse = await this.matchesService.update(id, homeTeamGoals, awayTeamGoals);
-    if (serviceResponse.status !== 'SUCCESSFUL') {
-      return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
-    }
-    return res.status(200).json(serviceResponse.data);
+    return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 }

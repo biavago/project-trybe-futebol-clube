@@ -9,6 +9,7 @@ const router = Router();
 router.post(
   '/',
   Validations.validateMatch,
+  Validations.validateToken,
   (req: Request, res: Response) => matchesController.create(req, res),
 );
 router.get('/', (req: Request, res: Response) => matchesController.getAllMatches(req, res));

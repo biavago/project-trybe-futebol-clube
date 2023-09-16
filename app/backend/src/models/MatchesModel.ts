@@ -22,12 +22,6 @@ export default class MatchesModel implements IMatchesModel {
     return newMatch;
   }
 
-  async findById(id: number): Promise<IMatches | null> {
-    const match = await this.model.findByPk(id);
-    if (match == null) return null;
-    return match;
-  }
-
   async findByProgressStatus(progressStatus: boolean): Promise<IMatches[]> {
     const matches = await this.model.findAll({
       include: [
@@ -40,11 +34,11 @@ export default class MatchesModel implements IMatchesModel {
   }
 
   async finish(id: number): Promise<number[]> {
-    const rowsUpdates = await this.model.update(
+    const rowsUpdated = await this.model.update(
       { inProgress: false },
       { where: { id } },
     );
-    return rowsUpdates;
+    return rowsUpdated;
   }
 
   async getAllMatches(): Promise<IMatches[]> {
@@ -57,15 +51,25 @@ export default class MatchesModel implements IMatchesModel {
     return allMatches;
   }
 
+  async getHomeTeamMatches(teamId: number): Promise<IMatches[]> {
+    const homeTeamMatches = await this.model.findAll({ where: { homeTeamId: teamId } });
+    return homeTeamMatches;
+  }
+
+  async getAwayTeamMatches(teamId: number): Promise<IMatches[]> {
+    const awayTeamMatches = await this.model.findAll({ where: { awayTeamId: teamId } });
+    return awayTeamMatches;
+  }
+
   async update(
     id: number,
     homeTeamGoals: number,
     awayTeamGoals: number,
   ): Promise<number[]> {
-    const rowsAffected = await this.model.update(
+    const rowsUpdated = await this.model.update(
       { homeTeamGoals, awayTeamGoals },
       { where: { id } },
     );
-    return rowsAffected;
+    return rowsUpdated;
   }
 }

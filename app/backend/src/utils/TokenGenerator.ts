@@ -1,7 +1,7 @@
 import { JwtPayload, sign, SignOptions, verify } from 'jsonwebtoken';
 
 export default class TokenGenerator {
-  private static secret = process.env.JWT_SECRET || 'jwt_secret';
+  private static secret = process.env.JWT_SECRET || 'secret';
 
   private static jwtConfig: SignOptions = {
     algorithm: 'HS256', expiresIn: '1d',

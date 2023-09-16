@@ -26,34 +26,7 @@ export default class MatchesService {
     };
   }
 
-  async findById(id: number): Promise<ServiceResponse<IMatches>> {
-    const match = await this.matchesModel.findById(id);
-    if (!match) return { status: 'NOT_FOUND', data: { message: `match ${id} not found` } };
-    return {
-      status: 'SUCCESSFUL',
-      data: match,
-    };
-  }
-
-  async findByProgressStatus(inProgress: string): Promise<ServiceResponse<IMatches[]>> {
-    if (inProgress) {
-      const matchInProgress = await this.matchesModel.findByProgressStatus(inProgress === 'true');
-      return {
-        status: 'SUCCESSFUL',
-        data: matchInProgress,
-      };
-    }
-
-    const matchesFound = await this.matchesModel.getAllMatches();
-    return {
-      status: 'SUCCESSFUL',
-      data: matchesFound,
-    };
-  }
-
   async finish(id: number): Promise<ServiceResponse<ServiceMessage>> {
-    const match = await this.matchesModel.findById(id);
-    if (!match) return { status: 'NOT_FOUND', data: { message: `match ${id} not found` } };
     await this.matchesModel.finish(id);
     return {
       status: 'SUCCESSFUL',
@@ -61,7 +34,14 @@ export default class MatchesService {
     };
   }
 
-  async getAllMatches(): Promise<ServiceResponse<IMatches[]>> {
+  async getAllMatches(inProgress: string): Promise<ServiceResponse<IMatches[]>> {
+    if (inProgress) {
+      const matchInProgress = await this.matchesModel.findByProgressStatus(inProgress === 'true');
+      return {
+        status: 'SUCCESSFUL',
+        data: matchInProgress,
+      };
+    }
     const allMatches = await this.matchesModel.getAllMatches();
     return {
       status: 'SUCCESSFUL',
@@ -77,7 +57,7 @@ export default class MatchesService {
     await this.matchesModel.update(id, homeTeamGoals, awayTeamGoals);
     return {
       status: 'SUCCESSFUL',
-      data: { message: 'Match updated' },
+      data: { message: 'Updated' },
     };
   }
 }

@@ -7,7 +7,6 @@ export interface IMatchesModel {
     homeTeamGoals: number,
     awayTeamGoals: number,
   ): Promise<IMatches>,
-  findById(id: number): Promise<IMatches | null>,
   findByProgressStatus(inProgressStatus: boolean): Promise<IMatches[]>,
   finish(id: number): Promise<number[]>;
   getAllMatches(): Promise<IMatches[]>,

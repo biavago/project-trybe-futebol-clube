@@ -1,6 +1,6 @@
-export const body = {
-  email: 'user@email.com',
-  password: 'password',
+export const validInfo = {
+  email: 'admin@admin.com',
+  password: 'secret_admin',
 }
 
 export const userInDB = {

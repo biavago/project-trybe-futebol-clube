@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import SequelizeMatches from '../database/models/SequelizeMatches';
 import TeamModel from '../database/models/SequelizeTeam';
 import { IMatches } from '../Interfaces/matches/Matches';
@@ -59,6 +60,18 @@ export default class MatchesModel implements IMatchesModel {
   async getAwayTeamMatches(teamId: number): Promise<IMatches[]> {
     const awayTeamMatches = await this.model.findAll({ where: { awayTeamId: teamId } });
     return awayTeamMatches;
+  }
+
+  async getAllTeamsMatches(teamId: number): Promise<IMatches[]> {
+    const allTeamsMatches = await this.model.findAll({
+      where: {
+        [Op.or]: [
+          { homeTeamId: teamId },
+          { awayTeamId: teamId },
+        ],
+      },
+    });
+    return allTeamsMatches;
   }
 
   async update(

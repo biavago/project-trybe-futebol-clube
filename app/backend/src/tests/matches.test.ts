@@ -49,6 +49,4 @@ describe('Testes das rotas /matches', () => {
     expect(body).to.deep.equal({ message: 'Finished' });
     expect(status).to.equal(200);
   });
-
-
 });

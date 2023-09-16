@@ -1,10 +1,11 @@
-// import { Request, Router, Response } from 'express';
-// import LbController from '../controllers/LeaderboardController';
+import { Request, Router, Response } from 'express';
+import LbController from '../controllers/LeaderboardController';
 
-// const lbController = new LbController();
+const lbController = new LbController();
 
-// const router = Router();
+const router = Router();
 
-// router.get('/home', (req: Request, res: Response) => lbController.getHome(req, res));
+router.get('/home', (req: Request, res: Response) => lbController.getLeaderboardHome(req, res));
+router.get('/away', (req: Request, res: Response) => lbController.getLeaderboardAway(req, res));
 
-// export default router;
+export default router;

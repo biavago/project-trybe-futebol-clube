@@ -1,42 +1,75 @@
-// import ILeaderboard from '../Interfaces/Leaderboard';
-// import { ServiceResponse } from '../Interfaces/ServiceResponse';
-// import SequelizeMatches from '../database/models/SequelizeMatches';
+import { IMatches } from '../Interfaces/matches/Matches';
 import MatchesModel from '../models/MatchesModel';
 import TeamsModel from '../models/TeamModel';
-
-// const leaderboard: ILeaderboard = {
-//   name: '',
-//   totalPoints: 0,
-//   totalGames: 0,
-//   totalVictories: 0,
-//   totalDraws: 0,
-//   totalLosses: 0,
-//   goalsFavor: 0,
-//   goalsOwn: 0,
-//   goalsBalance: 0,
-//   efficiency: 0,
-// };
+import { LeaderboardType, createLb } from '../types/Leaderboard';
 
 export default class LeaderboardService {
   constructor(
     private teamModel = new TeamsModel(),
     private matchesModel = new MatchesModel(),
-  ) {}
+  ) { }
 
-  private static efficiencyCalc(totalPoints: number, totalGames: number) {
-    return ((totalPoints / (totalGames * 3)) * 100).toFixed(2);
+  private static calculateHome(matches: IMatches[]) {
+    return matches.reduce((lbAcc: LeaderboardType, match: IMatches) => {
+      if (match.inProgress === true) return lbAcc;
+      const lbCalc: LeaderboardType = createLb();
+      lbCalc.totalGames = lbAcc.totalGames + 1;
+      if (match.homeTeamGoals > match.awayTeamGoals) {
+        lbCalc.totalVictories = lbAcc.totalVictories + 1;
+      }
+      if (match.homeTeamGoals === match.awayTeamGoals) lbCalc.totalDraws = lbAcc.totalDraws + 1;
+      if (match.homeTeamGoals < match.awayTeamGoals) lbCalc.totalLosses = lbAcc.totalLosses + 1;
+      lbCalc.goalsFavor = lbAcc.goalsFavor + match.homeTeamGoals;
+      lbCalc.goalsOwn = lbAcc.goalsOwn + match.awayTeamGoals;
+      lbCalc.goalsBalance = lbAcc.goalsFavor - lbAcc.goalsOwn;
+      return lbCalc;
+    }, createLb());
   }
 
-  // async getLeaderboardHome() {
-  //   // const lb = [];
-  //   const teams = await this.teamModel.findAll();
-  //   const leaderboard = await Promise.all(teams.map(async (team) => {
-  //     const matches = await this.matchesModel.getHomeTeamMatches(team.id);
-  //     const home = matches.reduce((acc, curr) => acc + curr);
-  //   }));
+  async getLeaderboardHome() {
+    const homeLeaderboard: LeaderboardType[] = [];
+    const teams = await this.teamModel.findAll();
+    await Promise.all(teams.map(async (team) => {
+      const matches = await this.matchesModel.getHomeTeamMatches(team.id);
+      const lbFromMatches = LeaderboardService.calculateHome(matches);
+      lbFromMatches.name = team.teamName;
+      lbFromMatches.totalPoints = (lbFromMatches.totalVictories * 3) + lbFromMatches.totalDraws;
+      const efficiency = (lbFromMatches.totalPoints / (lbFromMatches.totalGames * 3)) * 100;
+      lbFromMatches.efficiency = efficiency.toFixed(2);
+      homeLeaderboard.push(lbFromMatches);
+    }));
+    return { status: 'SUCCESSFUL', data: homeLeaderboard };
+  }
 
-  //   console.log('leaderboard', leaderboard);
+  private static calculateAway(matches: IMatches[]) {
+    return matches.reduce((lbAcc: LeaderboardType, match: IMatches) => {
+      if (match.inProgress === true) return lbAcc;
+      const lbCalc: LeaderboardType = createLb();
+      lbCalc.totalGames = lbAcc.totalGames + 1;
+      if (match.homeTeamGoals < match.awayTeamGoals) {
+        lbCalc.totalVictories = lbAcc.totalVictories + 1;
+      }
+      if (match.homeTeamGoals === match.awayTeamGoals) lbCalc.totalDraws = lbAcc.totalDraws + 1;
+      if (match.homeTeamGoals > match.awayTeamGoals) lbCalc.totalLosses = lbAcc.totalLosses + 1;
+      lbCalc.goalsFavor = lbAcc.goalsFavor + match.awayTeamGoals;
+      lbCalc.goalsOwn = lbAcc.goalsOwn + match.homeTeamGoals;
+      lbCalc.goalsBalance = lbAcc.goalsFavor - lbAcc.goalsOwn;
+      return lbCalc;
+    }, createLb());
+  }
 
-  //   return { status: 'SUCCESSFUL', data: [] };
-  // }
+  async getLeaderboardAway() {
+    const awayLeaderboard: LeaderboardType[] = [];
+    const teams = await this.teamModel.findAll();
+    await Promise.all(teams.map(async (team) => {
+      const matches = await this.matchesModel.getAwayTeamMatches(team.id);
+      const lbFromMatches = LeaderboardService.calculateAway(matches);
+      lbFromMatches.name = team.teamName;
+      lbFromMatches.totalPoints = (lbFromMatches.totalVictories * 3) + lbFromMatches.totalDraws;
+      const efficiency = (lbFromMatches.totalPoints / (lbFromMatches.totalGames * 3)) * 100;
+      lbFromMatches.efficiency = efficiency.toFixed(2);
+      awayLeaderboard.push(lbFromMatches);
+    }));
+    return { status: 'SUCCESSFUL', data: awayLeaderboard };
+  }
 }

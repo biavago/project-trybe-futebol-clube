@@ -19,7 +19,7 @@ router.get(
   (req: Request, res: Response) => {
     console.log(req);
     return usersController.role(req, res);
-  };
+  }
 );
 
 export default router;

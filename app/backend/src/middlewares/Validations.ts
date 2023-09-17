@@ -8,31 +8,29 @@ export default class Validations {
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> {
-    const { homeTeamId, awayTeamId } = req.body;
     const teamsService = new TeamService();
-    const home = (await teamsService.getTeamById(homeTeamId)).status;
-    const away = (await teamsService.getTeamById(awayTeamId)).status;
+    const { homeTeamId, awayTeamId } = req.body;
     if (homeTeamId === awayTeamId) {
       return res.status(422).json(
         { message: 'It is not possible to create a match with two equal teams' },
       );
     }
-    if (!home || !away) return res.status(404).json({ message: 'There is no team with such id!' });
+    const home = (await teamsService.getTeamById(homeTeamId)).status;
+    const away = (await teamsService.getTeamById(awayTeamId)).status;
+    if (home === 'NOT_FOUND' || away === 'NOT_FOUND') {
+      return res.status(404).json({ message: 'There is no team with such id!' });
+    }
     next();
   }
 
   static validateLogin(req: Request, res: Response, next: NextFunction): Response | void {
     const { email, password } = req.body;
-    console.log('req.body', req.body);
-    console.log('email', email);
-    console.log('password', password);
-
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'All fields must be filled' });
+    }
     if (!emailRegex.test(email) || password.length < 6) {
       return res.status(401).json({ message: 'Invalid email or password' });
-    }
-    if (email === '' || password === '') {
-      return res.status(400).json({ message: 'All fields must be filled' });
     }
     next();
   }

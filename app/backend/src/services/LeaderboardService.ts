@@ -38,7 +38,8 @@ export default class LeaderboardService {
       lbFromMatches.efficiency = efficiency.toFixed(2);
       homeLeaderboard.push(lbFromMatches);
     }));
-    return { status: 'SUCCESSFUL', data: homeLeaderboard };
+    const orderedHomeLb = LeaderboardService.getOrderedLb(homeLeaderboard);
+    return { status: 'SUCCESSFUL', data: orderedHomeLb };
   }
 
   private static calculateAway(matches: IMatches[]) {
@@ -70,6 +71,23 @@ export default class LeaderboardService {
       lbFromMatches.efficiency = efficiency.toFixed(2);
       awayLeaderboard.push(lbFromMatches);
     }));
-    return { status: 'SUCCESSFUL', data: awayLeaderboard };
+    const orderedAwayLb = LeaderboardService.getOrderedLb(awayLeaderboard);
+    return { status: 'SUCCESSFUL', data: orderedAwayLb };
+  }
+
+  static getOrderedLb(teams: LeaderboardType[]) {
+    const orderedLb = teams.sort((a, b) => {
+      if (a.totalPoints !== b.totalPoints) {
+        return b.totalPoints - a.totalPoints;
+      }
+      if (a.totalVictories !== b.totalVictories) {
+        return b.totalVictories - a.totalVictories;
+      }
+      if (a.goalsBalance !== b.goalsBalance) {
+        return b.goalsBalance - a.goalsBalance;
+      }
+      return b.goalsFavor - a.goalsFavor;
+    });
+    return orderedLb;
   }
 }

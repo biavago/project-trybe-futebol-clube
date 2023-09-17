@@ -49,8 +49,8 @@ export default class Validations {
     const tokenMsg = 'Token must be a valid token';
     const tokenToVerify = token.split(' ')[1] || token;
     const validToken = TokenGenerator.verifyToken(tokenToVerify);
-    console.log('tokenToVerify', tokenToVerify)
-    console.log('validToken', validToken)
+    console.log('tokenToVerify', tokenToVerify);
+    console.log('validToken', validToken);
     // ESSA VERIFICACAO FALHAVA PARA UM TOKEN INVALIDO!!
     // MUDADO O RETORNO DA FUNCAO verifyToken EM CASO DE ERRO
     if (validToken === tokenMsg) return res.status(401).json({ message: validToken });

@@ -10,7 +10,7 @@ export default class LoginController {
   async login(req: Request, res: Response) {
     const email = req.body;
     const serviceResponse = await this.usersService.login(email);
-    console.log('serviceResponse.data', serviceResponse.data)
+    console.log('serviceResponse.data', serviceResponse.data);
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
 

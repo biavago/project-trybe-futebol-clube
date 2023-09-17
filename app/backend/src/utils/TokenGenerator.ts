@@ -1,7 +1,7 @@
 import { JwtPayload, sign, SignOptions, verify } from 'jsonwebtoken';
 
 export default class TokenGenerator {
-  private static secret = process.env.JWT_SECRET || 'secret';
+  private static secret = process.env.JWT_SECRET || 'jwt_secret';
 
   private static jwtConfig: SignOptions = {
     algorithm: 'HS256', expiresIn: '1d',
@@ -15,7 +15,8 @@ export default class TokenGenerator {
     try {
       return verify(token, TokenGenerator.secret) as JwtPayload;
     } catch (error) {
-      return { message: 'Token must be a valid token' };
+      // return { message: 'Token must be a valid token' };
+      return 'Token must be a valid token';
     }
   }
 }

@@ -23,6 +23,10 @@ export default class Validations {
 
   static validateLogin(req: Request, res: Response, next: NextFunction): Response | void {
     const { email, password } = req.body;
+    console.log('req.body', req.body);
+    console.log('email', email);
+    console.log('password', password);
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email) || password.length < 6) {
       return res.status(401).json({ message: 'Invalid email or password' });
@@ -34,7 +38,10 @@ export default class Validations {
   }
 
   static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
+    console.log('req.headers', req.headers);
+    console.log('req.body', req.body);
     const token = req.headers.authorization;
+    console.log('token', token);
     if (!token) {
       return res.status(401).json({ message: 'Token not found' });
     }
@@ -42,6 +49,10 @@ export default class Validations {
     const tokenMsg = 'Token must be a valid token';
     const tokenToVerify = token.split(' ')[1] || token;
     const validToken = TokenGenerator.verifyToken(tokenToVerify);
+    console.log('tokenToVerify', tokenToVerify)
+    console.log('validToken', validToken)
+    // ESSA VERIFICACAO FALHAVA PARA UM TOKEN INVALIDO!!
+    // MUDADO O RETORNO DA FUNCAO verifyToken EM CASO DE ERRO
     if (validToken === tokenMsg) return res.status(401).json({ message: validToken });
     req.body.payload = validToken;
     next();

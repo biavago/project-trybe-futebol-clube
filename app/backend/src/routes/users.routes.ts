@@ -14,7 +14,12 @@ router.post(
 
 router.get(
   '/role',
-  (req: Request, res: Response) => usersController.role(req, res),
+  Validations.validateToken,
+  // (req: Request, res: Response) => usersController.role(req, res),
+  (req: Request, res: Response) => {
+    console.log(req)
+    return usersController.role(req, res)
+  }
 );
 
 export default router;

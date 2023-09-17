@@ -54,7 +54,7 @@ export default class LeaderboardService {
       if (match.homeTeamGoals > match.awayTeamGoals) lbCalc.totalLosses = lbAcc.totalLosses + 1;
       lbCalc.goalsFavor = lbAcc.goalsFavor + match.awayTeamGoals;
       lbCalc.goalsOwn = lbAcc.goalsOwn + match.homeTeamGoals;
-      lbCalc.goalsBalance = lbAcc.goalsFavor - lbAcc.goalsOwn;
+      // lbCalc.goalsBalance = lbAcc.goalsFavor - lbAcc.goalsOwn;
       return lbCalc;
     }, createLb());
   }
@@ -69,6 +69,7 @@ export default class LeaderboardService {
       lbFromMatches.totalPoints = (lbFromMatches.totalVictories * 3) + lbFromMatches.totalDraws;
       const efficiency = (lbFromMatches.totalPoints / (lbFromMatches.totalGames * 3)) * 100;
       lbFromMatches.efficiency = efficiency.toFixed(2);
+      lbFromMatches.goalsBalance = lbFromMatches.goalsFavor - lbFromMatches.goalsOwn;
       awayLeaderboard.push(lbFromMatches);
     }));
     const orderedAwayLb = LeaderboardService.getOrderedLb(awayLeaderboard);

@@ -3,7 +3,7 @@ import * as chai from 'chai';
 // @ts-ignore
 import chaiHttp = require('chai-http');
 import { app } from '../app';
-import { userInDB, validInfo, invalidEmail, invalidPassword } from './mock/usersMock';
+import { validInfo, invalidEmail, invalidPassword } from './mock/usersMock';
 
 chai.use(chaiHttp);
 const { expect } = chai;

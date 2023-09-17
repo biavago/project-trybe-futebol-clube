@@ -15,7 +15,6 @@ export default class TokenGenerator {
     try {
       return verify(token, TokenGenerator.secret) as JwtPayload;
     } catch (error) {
-      // return { message: 'Token must be a valid token' };
       return 'Token must be a valid token';
     }
   }

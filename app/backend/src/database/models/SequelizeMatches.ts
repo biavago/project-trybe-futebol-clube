@@ -48,6 +48,7 @@ SequelizeMatches.init({
 }, {
   sequelize: db,
   modelName: 'matches',
+  tableName: 'matches',
   timestamps: false,
   underscored: true,
 });

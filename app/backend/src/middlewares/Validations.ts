@@ -39,21 +39,13 @@ export default class Validations {
   }
 
   static validateToken(req: Request, res: Response, next: NextFunction): Response | void {
-    console.log('req.headers', req.headers);
-    console.log('req.body', req.body);
     const token = req.headers.authorization;
-    console.log('token', token);
     if (!token) {
       return res.status(401).json({ message: 'Token not found' });
     }
-
     const tokenMsg = 'Token must be a valid token';
     const tokenToVerify = token.split(' ')[1] || token;
     const validToken = TokenGenerator.verifyToken(tokenToVerify);
-    console.log('tokenToVerify', tokenToVerify);
-    console.log('validToken', validToken);
-    // ESSA VERIFICACAO FALHAVA PARA UM TOKEN INVALIDO!!
-    // MUDADO O RETORNO DA FUNCAO verifyToken EM CASO DE ERRO
     if (validToken === tokenMsg) return res.status(401).json({ message: validToken });
     req.body.payload = validToken;
     next();

@@ -16,8 +16,12 @@ export default class LeaderboardService {
       lbCalc.totalGames = lbAcc.totalGames + 1;
       if (match.homeTeamGoals > match.awayTeamGoals) {
         lbCalc.totalVictories = lbAcc.totalVictories + 1;
+        lbCalc.totalPoints = lbAcc.totalPoints + 3;
       }
-      if (match.homeTeamGoals === match.awayTeamGoals) lbCalc.totalDraws = lbAcc.totalDraws + 1;
+      if (match.homeTeamGoals === match.awayTeamGoals) {
+        lbCalc.totalDraws = lbAcc.totalDraws + 1;
+        lbCalc.totalPoints = lbAcc.totalPoints + 1;
+      }
       if (match.homeTeamGoals < match.awayTeamGoals) lbCalc.totalLosses = lbAcc.totalLosses + 1;
       lbCalc.goalsFavor = lbAcc.goalsFavor + match.homeTeamGoals;
       lbCalc.goalsOwn = lbAcc.goalsOwn + match.awayTeamGoals;

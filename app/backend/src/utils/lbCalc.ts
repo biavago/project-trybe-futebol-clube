@@ -19,8 +19,8 @@ const victory = (homeTeamGoals: number, awayTeamGoals: number): string => {
     return 'homeTeam';
   }
   if (awayTeamGoals > homeTeamGoals) {
-      return 'awayTeam';
-  } 
+    return 'awayTeam';
+  }
   return 'draw';
 };
 
@@ -80,13 +80,29 @@ const mergeBoards = (
   return leaderboard;
 };
 
+const getOrderedLb = (teams: LeaderboardType[]) => {
+  const orderedLb = teams.sort((a, b) => {
+    if (a.totalPoints !== b.totalPoints) {
+      return b.totalPoints - a.totalPoints;
+    }
+    if (a.totalVictories !== b.totalVictories) {
+      return b.totalVictories - a.totalVictories;
+    }
+    if (a.goalsBalance !== b.goalsBalance) {
+      return b.goalsBalance - a.goalsBalance;
+    }
+    return b.goalsFavor - a.goalsFavor;
+  });
+  return orderedLb;
+};
+
 const mergeLeaderboard = (
-    homeLb: LeaderboardType[],
-    awayLb: LeaderboardType[],
+  homeMergedLb: LeaderboardType[],
+  awayMergedLb: LeaderboardType[],
 ): LeaderboardType[] => {
   const mergedLeaderboard: LeaderboardType[] = [];
-  homeLb.forEach((homeLb) => {
-    const structureAway = awayLb
+  homeMergedLb.forEach((homeLb) => {
+    const structureAway = awayMergedLb
       .find((structure) => structure.name === homeLb.name);
     if (structureAway) {
       const mergedBoard = mergeBoards(homeLb, structureAway);
@@ -96,28 +112,12 @@ const mergeLeaderboard = (
   return getOrderedLb(mergedLeaderboard);
 };
 
-const getOrderedLb = (teams: LeaderboardType[]) => {
-    const orderedLb = teams.sort((a, b) => {
-      if (a.totalPoints !== b.totalPoints) {
-        return b.totalPoints - a.totalPoints;
-      }
-      if (a.totalVictories !== b.totalVictories) {
-        return b.totalVictories - a.totalVictories;
-      }
-      if (a.goalsBalance !== b.goalsBalance) {
-        return b.goalsBalance - a.goalsBalance;
-      }
-      return b.goalsFavor - a.goalsFavor;
-    });
-    return orderedLb;
-  }
-
 export default {
-    mergeLeaderboard,
-    mergeBoards,
-    getOrderedLb,
-    writeLb,
-    goalsCalc,
-    victory,
-    createLb,
-}
+  mergeLeaderboard,
+  mergeBoards,
+  getOrderedLb,
+  writeLb,
+  goalsCalc,
+  victory,
+  createLb,
+};

@@ -53,21 +53,21 @@ export default class MatchesModel implements IMatchesModel {
   }
 
   async getHomeTeamMatches(teamId: number): Promise<IMatches[]> {
-    const homeTeamMatches = await this.model.findAll({ 
-      where: { 
+    const homeTeamMatches = await this.model.findAll({
+      where: {
         homeTeamId: teamId,
         inProgress: false,
-      } 
+      },
     });
     return homeTeamMatches;
   }
 
   async getAwayTeamMatches(teamId: number): Promise<IMatches[]> {
     const awayTeamMatches = await this.model.findAll({
-      where: { 
+      where: {
         awayTeamId: teamId,
         inProgress: false,
-      } 
+      },
     });
     return awayTeamMatches;
   }

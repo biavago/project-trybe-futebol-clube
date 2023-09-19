@@ -23,5 +23,4 @@ export default class LeaderboardController {
     const serviceResponse = await this.lbService.getLeaderboard(homeOrAwayTeam);
     return res.status(mapStatusHTTP(serviceResponse.status)).json(serviceResponse.data);
   }
-
 }

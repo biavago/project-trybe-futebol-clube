@@ -9,5 +9,4 @@ router.get('/', (req: Request, res: Response) => lbController.getAllLb(req, res)
 router.get('/home', (req: Request, res: Response) => lbController.getHomeLb(req, res));
 router.get('/away', (req: Request, res: Response) => lbController.getAwayLb(req, res));
 
-
 export default router;

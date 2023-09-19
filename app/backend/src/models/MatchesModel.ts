@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import SequelizeMatches from '../database/models/SequelizeMatches';
 import TeamModel from '../database/models/SequelizeTeam';
-import { IMatches } from '../Interfaces/matches/Matches';
+import IMatches from '../Interfaces/matches/Matches';
 import { IMatchesModel } from '../Interfaces/matches/MatchesModel';
 
 export default class MatchesModel implements IMatchesModel {
@@ -53,12 +53,22 @@ export default class MatchesModel implements IMatchesModel {
   }
 
   async getHomeTeamMatches(teamId: number): Promise<IMatches[]> {
-    const homeTeamMatches = await this.model.findAll({ where: { homeTeamId: teamId } });
+    const homeTeamMatches = await this.model.findAll({ 
+      where: { 
+        homeTeamId: teamId,
+        inProgress: false,
+      } 
+    });
     return homeTeamMatches;
   }
 
   async getAwayTeamMatches(teamId: number): Promise<IMatches[]> {
-    const awayTeamMatches = await this.model.findAll({ where: { awayTeamId: teamId } });
+    const awayTeamMatches = await this.model.findAll({
+      where: { 
+        awayTeamId: teamId,
+        inProgress: false,
+      } 
+    });
     return awayTeamMatches;
   }
 

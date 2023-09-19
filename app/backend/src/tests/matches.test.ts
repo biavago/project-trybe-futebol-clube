@@ -49,4 +49,22 @@ describe('Testes das rotas /matches', () => {
     expect(body).to.deep.equal({ message: 'Finished' });
     expect(status).to.equal(200);
   });
+
+  it('Teste da create', async () => {
+    sinon.stub(TokenGenerator, 'verifyToken').resolves('token');
+    const validMatch = {
+      "homeTeamId": 16,
+      "awayTeamId": 8,
+      "homeTeamGoals": 2,
+      "awayTeamGoals": 2
+    };
+    const { body, status }= await chai.request(app)
+      .post('/matches')
+      .send(validMatch)
+      .set('authorization', 'token');
+
+      expect(body).to.have.property('id');
+      expect(body).to.have.property('inProgress');
+      expect(status).to.equal(201);
+  });
 });

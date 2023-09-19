@@ -1,5 +1,5 @@
 import MatchesModel from '../models/MatchesModel';
-import { IMatches } from '../Interfaces/matches/Matches';
+import IMatches from '../Interfaces/matches/Matches';
 import { ServiceMessage, ServiceResponse } from '../Interfaces/ServiceResponse';
 import { IMatchesModel } from '../Interfaces/matches/MatchesModel';
 

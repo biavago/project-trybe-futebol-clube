@@ -1,4 +1,4 @@
-import { IMatches } from './Matches';
+import IMatches from '../matches/Matches';
 
 export interface IMatchesModel {
   create(
